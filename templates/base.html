@@ -1,0 +1,335 @@
+{% load static %} {% load humanize %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Language" content="fa" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}حسین مهدوی{% endblock %}</title>
+    <meta name="description" content="به وبلاگ حسین مهدوی خوش آمدید..." />
+    <meta
+      name="keywords"
+      content="برنامه نویسی, تکنولوژی, آموزش, وبلاگ شخصی,امنیت,باگ بانتی,ایزی لرن, حسین مهدوی"
+    />
+    <meta name="author" content="HosseinMahdavi" />
+    <meta name="robots" content="index, follow" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta
+      http-equiv="Referrer-Policy"
+      content="strict-origin-when-cross-origin"
+    />
+
+    <meta property="og:title" content="وبلاگ حسین مهدوی" />
+    <meta
+      property="og:description"
+      content="جایی برای به اشتراک گذاشتن تجربیات..."
+    />
+    <meta property="og:image" content="https://example.com/hossein-blog.jpg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ezzelearn.ir" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="وبلاگ حسین مهدوی" />
+    <meta
+      name="twitter:description"
+      content="مطالبی درباره تکنولوژی و برنامه‌نویسی"
+    />
+    <meta name="twitter:image" content="https://example.com/hossein-blog.jpg" />
+
+    <link rel="icon" href="../static/imgs/5.jpeg" type="image/x-icon" />
+
+    <!-- Bootstrap RTL CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <!-- فونت وزیر -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/base.css">
+
+    <!-- Dark Theme Styles -->
+    <style>
+
+    </style>
+
+    {% block extra_css %}{% endblock %}
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg m-0">
+      <div class="container">
+        
+
+                <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          id="navbar-toggler"
+        >
+          <span class="bar top-bar"></span>
+          <span class="bar middle-bar"></span>
+          <span class="bar bottom-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'blog:home' %}">
+          <h1 class="text-primary p-0 m-0 logo-h1">ایزی لرن</h1>
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blog:home' %}">
+                <i class="fas fa-home me-1"></i>خانه
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blog:post_list' %}">
+                <i class="fas fa-newspaper me-1"></i>پست‌ها
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blog:about' %}">
+                <i class="fas fa-user me-1"></i>درباره من
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blog:contact' %}">
+                <i class="fas fa-envelope me-1"></i>تماس
+              </a>
+            </li>
+          </ul>
+
+          <!-- Search Form -->
+          <form
+            class="d-flex search-form"
+            method="GET"
+            action="{% url 'blog:search' %}"
+          >
+            <input
+              class="form-control"
+              type="search"
+              name="q"
+              placeholder="جستجو در پست‌ها..."
+              value="{{ request.GET.q }}"
+              aria-label="جستجو"
+            />
+            <button class="btn" type="submit" aria-label="جستجو">
+              <i class="fas fa-search"></i>
+            </button>
+            <!-- Theme Toggle Button -->
+
+          </form>
+         <div class="d-flex justify-content-start d-none d-lg-inline-block">
+           <button id="navbar-theme-toggle" class="navbar-toggle-btn ms-3 ">
+    <i id="navbar-theme-icon" class="fas fa-moon"></i>
+  </button>
+        </div>
+
+</div>
+
+      </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-4">
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert"
+      >
+        {% if message.tags == 'success' %}
+        <i class="fas fa-check-circle me-2"></i>
+        {% elif message.tags == 'error' %}
+        <i class="fas fa-exclamation-circle me-2"></i>
+        {% elif message.tags == 'warning' %}
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {% else %}
+        <i class="fas fa-info-circle me-2"></i>
+        {% endif %} {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="بستن"
+          style="filter: invert(1)"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="container my-5">{% block content %}{% endblock %}</main>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-light pt-5">
+      <div class="container">
+        <div class="row">
+          <div class="d-block d-md-none border-top border-secondary my-3"></div>
+          <!-- معرفی وبلاگ -->
+          <div class="col-md-3 mb-4">
+            <h5>
+              <i class="fas fa-blog me-2 text-success"></i>وبلاگ
+              <span class="text-success">حسین مهدوی</span>
+            </h5>
+            <p>
+              اینجا مکانی برای یادگیری و اشتراک تجربیات در زمینه امنیت سایبری و
+              تکنولوژی است. اگر شما هم به دنیای تست نفوذ و امنیت سایبری علاقه
+              دارید. با مشارکت شما، جامعه امنیت دیجیتال قوی‌تر و آگاه‌تر خواهد
+              شد.
+            </p>
+          </div>
+          <div class="d-block d-md-none border-top border-secondary my-3"></div>
+          <!-- لینک‌های سریع -->
+          <div class="col-md-3 mb-4 border-md-start border-light ps-md-3">
+            <h5 class="text-info">
+              <i class="fas fa-link me-2 text-secondary"></i>دسترسی سریع
+            </h5>
+            <div class="d-grid gap-2">
+              <a
+                href="{% url 'blog:home' %}"
+                class="btn btn-outline-light btn-sm w-100 d-flex align-items-center"
+              >
+                <i class="fas fa-chevron-right me-2"></i>خانه
+              </a>
+              <a
+                href="{% url 'blog:post_list' %}"
+                class="btn btn-outline-light btn-sm w-100 d-flex align-items-center"
+              >
+                <i class="fas fa-chevron-right me-2"></i>مقالات محبوب
+              </a>
+              <a
+                href="{% url 'blog:about' %}"
+                class="btn btn-outline-light btn-sm w-100 d-flex align-items-center"
+              >
+                <i class="fas fa-chevron-right me-2"></i>درباره من
+              </a>
+              <a
+                href="{% url 'blog:contact' %}"
+                class="btn btn-outline-light btn-sm w-100 d-flex align-items-center"
+              >
+                <i class="fas fa-chevron-right me-2"></i>تماس با ما
+              </a>
+            </div>
+          </div>
+          <div class="d-block d-md-none border-top border-secondary my-3"></div>
+          <!-- شبکه‌های اجتماعی -->
+          <div class="col-md-3 mb-4 border-md-start border-light ps-md-3">
+            <h5 style="color: #1571d4">
+              <i
+                class="fas fa-share-alt me-2"
+                style="color: rgb(9, 114, 234)"
+              ></i
+              >دنبال کنید
+            </h5>
+            <div class="d-flex justify-content-around">
+              <a
+                href="https://x.com/Mahdavi_110011"
+                class="btn btn-outline-info btn-lg rounded-circle"
+                aria-label="توییتر"
+              >
+                <i class="fab fa-twitter" style="color: #1da1f2"></i>
+              </a>
+              <a
+                href="https://www.instagram.com/ezzelearn/"
+                class="btn btn-outline-danger btn-lg rounded-circle"
+                aria-label="اینستاگرام"
+              >
+                <i class="fab fa-instagram" style="color: #e4405f"></i>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/hossein-mahdavi-b43768284"
+                class="btn btn-outline-primary btn-lg rounded-circle"
+                aria-label="لینکدین"
+              >
+                <i class="fab fa-linkedin" style="color: #0077b5"></i>
+              </a>
+              <a
+                href="https://github.com/HosseinMahdavi-84"
+                class="btn btn-outline-light border-white btn-lg rounded-circle"
+                aria-label="گیت‌هاب"
+              >
+                <i class="fab fa-github text-light"></i>
+              </a>
+              <a
+                href="https://t.me/ezzelearn"
+                class="btn btn-outline-primary btn-lg rounded-circle"
+                aria-label="تلگرام"
+              >
+                <i class="fab fa-telegram-plane" style="color: #0b7cd8"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="d-block d-md-none border-top border-secondary my-3"></div>
+
+   <div class="col-md-3 mb-4 border-md-start border-light ps-md-3">
+  <h5 style="color: #a8bc25">
+    <i class="fas fa-rocket me-2 text-warning"></i>Roadmap
+  </h5>
+  <ul class="list-unstyled">
+    <li class="text-light mb-2">
+      <i class="fas fa-circle-dot me-2 text-primary"></i> معرفی ابزار و تکنولوژی جدید
+    </li>
+    <li class="text-light mb-2">
+      <i class="fas fa-circle-dot me-2 text-primary"></i> ساخت ابزار تست نفوذ
+    </li>
+    <li class="text-light mb-2">
+      <i class="fas fa-circle-dot me-2 text-primary"></i> رتبه در HackerOne
+    </li>
+    <li class="text-light mb-2">
+      <i class="fas fa-circle-dot me-2 text-primary"></i> آزمایشگاه شخصی (CTF‑lab)
+    </li>
+    <li class="text-light mb-2">
+      <i class="fas fa-circle-dot me-2 text-primary"></i> اتوماسیون اسکن و گزارش
+    </li>
+  </ul>
+</div>
+
+
+        <!-- جداکننده افقی برای موبایل -->
+        <div class="d-block d-md-none border-top border-light my-3"></div>
+
+        <!-- حقوق و سازنده -->
+        <div class="row">
+          <div class="col-12 text-center">
+            <p class="mb-0 small">
+              <i class="fas fa-copyright me-1"></i>۱۴۰۴ وبلاگ حسین مهدوی. تمامی
+              حقوق محفوظ است.<br />
+              طراحی و توسعه وبسایت توسط <br /><strong class="text-primary fs-4"
+                >حسین مهدوی</strong
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+<button id="floating-theme-toggle">
+  <i id="floating-theme-icon" class="fas fa-moon"></i>
+</button>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="/static/js/base.js"></script>
+
+
+
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>
