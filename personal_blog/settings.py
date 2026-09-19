@@ -189,24 +189,24 @@ USE_TZ = True
 # ============================================================
 # Static Files
 # ============================================================
-
 STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles_build"
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
+STORAGES = {
+    "default": {
+        "BACKEND": "blog.storage.VercelBlobStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 # ============================================================
 # Media Files
 # ============================================================
-
-MEDIA_URL = "/media/"
-
-MEDIA_ROOT = BASE_DIR / "media"
-
 
 # ============================================================
 # CKEditor
