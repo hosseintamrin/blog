@@ -1,11 +1,11 @@
 """
 Django settings for personal_blog project.
 """
-
 import os
 from pathlib import Path
-
 from dotenv import load_dotenv
+import dj_database_url
+
 
 
 # ============================================================
@@ -122,16 +122,23 @@ WSGI_APPLICATION = "personal_blog.wsgi.application"
 # Database - PostgreSQL
 # ============================================================
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", "blog_db"),
-        "USER": os.getenv("DB_USER", "x0mahdavi"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-        "PORT": os.getenv("DB_PORT", "5432"),
+if os.getenv("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.config(
+            conn_max_age=600,
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("DB_NAME", "blog_db"),
+            "USER": os.getenv("DB_USER", "x0mahdavi"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
+            "HOST": os.getenv("DB_HOST", "127.0.0.1"),
+            "PORT": os.getenv("DB_PORT", "5432"),
+        }
+    }
 
 
 # ============================================================
